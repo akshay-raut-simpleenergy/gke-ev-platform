@@ -1,0 +1,26 @@
+# macOS
+.DS_Store
+
+# Linux
+*~
+
+# Logs
+*.log
+
+# Temporary files
+tmp/
+temp/
+
+# IDEs
+.vscode/
+.idea/
+
+# Terraform (future use)
+.terraform/
+*.tfstate
+*.tfstate.backup
+
+# Kubernetes secrets generated locally
+*.pem
+*.key
+*.crt
