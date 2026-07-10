@@ -1,0 +1,105 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: emqx
+  namespace: emqx
+  labels:
+    app: emqx
+
+spec:
+  serviceName: emqx-headless
+  replicas: 3
+
+  selector:
+    matchLabels:
+      app: emqx
+
+  updateStrategy:
+    type: RollingUpdate
+
+  podManagementPolicy: OrderedReady
+
+  template:
+    metadata:
+      labels:
+        app: emqx
+
+    spec:
+      terminationGracePeriodSeconds: 60
+
+      containers:
+        - name: emqx
+
+          image: emqx/emqx:5.8.6
+          imagePullPolicy: IfNotPresent
+
+          ports:
+            - name: mqtt
+              containerPort: 1883
+
+            - name: dashboard
+              containerPort: 18083
+
+            - name: epmd
+              containerPort: 4369
+
+            - name: dist
+              containerPort: 5370
+
+          envFrom:
+            - configMapRef:
+                name: emqx-config
+
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+
+          volumeMounts:
+            - name: emqx-data
+              mountPath: /opt/emqx/data
+
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "1Gi"
+
+            limits:
+              cpu: "1"
+              memory: "2Gi"
+
+          readinessProbe:
+            tcpSocket:
+              port: 1883
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 6
+
+          livenessProbe:
+            tcpSocket:
+              port: 1883
+            initialDelaySeconds: 60
+            periodSeconds: 20
+            timeoutSeconds: 5
+            failureThreshold: 6
+
+  volumeClaimTemplates:
+    - metadata:
+        name: emqx-data
+
+      spec:
+        accessModes:
+          - ReadWriteOnce
+
+        storageClassName: standard-rwo
+
+        resources:
+          requests:
+            storage: 10Gi
