@@ -2,13 +2,22 @@
 # Apache Flink Configuration
 # ==========================================
 
+global:
+  security:
+    allowInsecureImages: true
+
+image:
+  registry: docker.io
+  repository: bitnamilegacy/flink
+  tag: 2.1.0-debian-12-r1
+
 jobmanager:
   replicaCount: 1
 
   resources:
     requests:
-      cpu: 500m
-      memory: 1024Mi
+      cpu: 50m
+      memory: 200Mi
 
     limits:
       cpu: 1000m
@@ -19,8 +28,8 @@ taskmanager:
 
   resources:
     requests:
-      cpu: 500m
-      memory: 1024Mi
+      cpu: 50m
+      memory: 200Mi
 
     limits:
       cpu: 1000m
