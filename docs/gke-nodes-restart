@@ -1,0 +1,59 @@
+> how to stop this pods and nodes temporary
+
+▾ Thought for 4s, 437 tokens
+  Addressing Temporary Stoppage
+  
+  I'm currently focused on how to temporarily halt pods and nodes to reduce resource consumption. My approach involves scaling down the StatefulSet replicas to zero for temporary EMQX pod stoppage. This
+  preserves the stateful configuration while stopping operations.
+  To stop your pods and nodes temporarily (usually to save cloud costs when you are not working), you can do it in two steps:
+  ──────
+  ### Step 1: Stop the Pods (Scale down to 0)
+
+  This is done at the Kubernetes level. It deletes the running EMQX containers, but keeps your configuration and data safe in the persistent volumes.
+
+  • To Stop:
+    kubectl scale statefulset emqx --replicas=0 -n emqx
+    
+  • To Start again later:
+    kubectl scale statefulset emqx --replicas=3 -n emqx
+    
+  ──────
+  ### Step 2: Stop the GKE Nodes (Scale Node Pool to 0)
+
+  Even if no pods are running, Google Cloud will still charge you for the virtual machines (nodes) that make up your cluster. To stop the nodes completely, you can resize your GKE node pool to  0 .
+
+  You can do this either via the Google Cloud Console UI, or by running the following  gcloud  command in your terminal:
+
+  • To Stop the Nodes (Resize to 0):
+    gcloud container clusters resize gke-ev-platform-cluster \
+      --node-pool default-pool \
+      --num-nodes 0 \
+      --region asia-south1
+    (This turns off the virtual machines, so you stop getting billed for them).
+  • To Start the Nodes again later:
+    gcloud container clusters resize gke-ev-platform-cluster \
+      --node-pool default-pool \
+      --num-nodes 3 \
+      --region asia-south1
+    (This will spin up 3 new nodes, and once they are ready, Kubernetes will automatically restart your EMQX pods).
+
+
+
+### How to start them back up when you are ready to resume work:
+
+  1. Scale the GKE nodes back to 3:
+    gcloud container clusters resize ev-platform-cluster \
+      --node-pool default-pool \
+      --num-nodes 3 \
+      --zone asia-south1-a \
+      --quiet
+    (Wait a minute or two for the nodes to spin up and become ready)
+  2. Scale the EMQX StatefulSet back to 3:
+    kubectl scale statefulset emqx --replicas=3 -n emqx
+
+--------------------------------------------------------------------------
+
+
+
+
+

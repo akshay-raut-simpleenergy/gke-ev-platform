@@ -1,0 +1,90 @@
+cluster:
+  name: pinot
+
+zookeeper:
+  enabled: true
+  replicaCount: 1
+  resources:
+    requests:
+      cpu: 50m
+      memory: 256Mi
+    limits:
+      cpu: 2000m
+      memory: 512Mi
+  heapSize: "256"
+  tolerations:
+    - key: "node.kubernetes.io/memory-pressure"
+      operator: "Exists"
+      effect: "NoSchedule"
+
+controller:
+  replicaCount: 1
+  jvmOpts: "-Xms128M -Xmx384M -XX:+UseG1GC"
+  resources:
+    requests:
+      cpu: 50m
+      memory: 384Mi
+    limits:
+      cpu: 2000m
+      memory: 768Mi
+  probes:
+    liveness:
+      initialDelaySeconds: 120
+      failureThreshold: 30
+    readiness:
+      initialDelaySeconds: 120
+      failureThreshold: 30
+  tolerations:
+    - key: "node.kubernetes.io/memory-pressure"
+      operator: "Exists"
+      effect: "NoSchedule"
+
+broker:
+  replicaCount: 1
+  jvmOpts: "-Xms128M -Xmx384M -XX:+UseG1GC"
+  resources:
+    requests:
+      cpu: 50m
+      memory: 384Mi
+    limits:
+      cpu: 2000m
+      memory: 768Mi
+  probes:
+    liveness:
+      initialDelaySeconds: 120
+      failureThreshold: 30
+    readiness:
+      initialDelaySeconds: 120
+      failureThreshold: 30
+  tolerations:
+    - key: "node.kubernetes.io/memory-pressure"
+      operator: "Exists"
+      effect: "NoSchedule"
+
+server:
+  replicaCount: 1
+  jvmOpts: "-Xms256M -Xmx640M -XX:+UseG1GC"
+  resources:
+    requests:
+      cpu: 50m
+      memory: 768Mi
+    limits:
+      cpu: 2000m
+      memory: 1280Mi
+  probes:
+    liveness:
+      initialDelaySeconds: 120
+      failureThreshold: 30
+    readiness:
+      initialDelaySeconds: 120
+      failureThreshold: 30
+  tolerations:
+    - key: "node.kubernetes.io/memory-pressure"
+      operator: "Exists"
+      effect: "NoSchedule"
+
+minion:
+  enabled: false
+
+minionStateless:
+  enabled: false
