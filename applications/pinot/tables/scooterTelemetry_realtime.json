@@ -1,0 +1,33 @@
+{
+  "tableName": "scooterTelemetry",
+  "tableType": "REALTIME",
+
+  "segmentsConfig": {
+    "schemaName": "scooterTelemetry",
+    "replication": "1"
+  },
+
+  "tenants": {},
+
+  "tableIndexConfig": {
+    "loadMode": "MMAP"
+  },
+
+  "ingestionConfig": {
+    "streamIngestionConfig": {
+      "type": "kafka",
+      "streamConfigMaps": [
+        {
+          "streamType": "kafka",
+          "stream.kafka.topic.name": "scooter.telemetry",
+          "stream.kafka.broker.list": "kafka.kafka.svc.cluster.local:9092",
+          "stream.kafka.consumer.type": "lowlevel",
+          "stream.kafka.decoder.class.name": "org.apache.pinot.plugin.inputformat.json.JSONMessageDecoder",
+          "realtime.segment.flush.threshold.rows": "50000"
+        }
+      ]
+    }
+  },
+
+  "metadata": {}
+}

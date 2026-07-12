@@ -1,0 +1,31 @@
+{
+  "schemaName": "scooterTelemetry",
+  "dimensionFieldSpecs": [
+    {
+      "name": "vehicleId",
+      "dataType": "STRING"
+    }
+  ],
+  "metricFieldSpecs": [
+    {
+      "name": "speed",
+      "dataType": "DOUBLE"
+    },
+    {
+      "name": "battery",
+      "dataType": "DOUBLE"
+    },
+    {
+      "name": "temperature",
+      "dataType": "DOUBLE"
+    }
+  ],
+  "dateTimeFieldSpecs": [
+    {
+      "name": "eventTime",
+      "dataType": "LONG",
+      "format": "1:MILLISECONDS:EPOCH",
+      "granularity": "1:MILLISECONDS"
+    }
+  ]
+}
