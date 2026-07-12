@@ -1,0 +1,40 @@
+# Number of Kafka brokers
+replicaCount: 3
+
+image:
+  registry: docker.io
+  repository: bitnami/kafka
+  tag: 4.0.0
+
+listeners:
+  client:
+    protocol: PLAINTEXT
+
+controller:
+  replicaCount: 3
+
+kraft:
+  enabled: true
+
+zookeeper:
+  enabled: false
+
+persistence:
+  enabled: true
+  storageClass: standard-rwo
+  size: 20Gi
+
+resources:
+  requests:
+    cpu: 500m
+    memory: 1Gi
+
+  limits:
+    cpu: 1
+    memory: 2Gi
+
+service:
+  type: ClusterIP
+
+externalAccess:
+  enabled: false
