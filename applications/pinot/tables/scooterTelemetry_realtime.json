@@ -4,7 +4,8 @@
 
   "segmentsConfig": {
     "schemaName": "scooterTelemetry",
-    "replication": "1"
+    "replication": "1",
+    "timeColumnName": "eventTime"
   },
 
   "tenants": {},
