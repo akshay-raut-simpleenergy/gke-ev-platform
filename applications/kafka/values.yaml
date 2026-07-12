@@ -3,8 +3,8 @@ replicaCount: 3
 
 image:
   registry: docker.io
-  repository: bitnami/kafka
-  tag: 4.0.0
+  repository: bitnamilegacy/kafka
+  tag: 4.0.0-debian-12-r10
 
 listeners:
   client:
@@ -12,6 +12,13 @@ listeners:
 
 controller:
   replicaCount: 3
+  resources:
+    requests:
+      cpu: 100m
+      memory: 512Mi
+    limits:
+      cpu: 500m
+      memory: 1Gi
 
 kraft:
   enabled: true
@@ -23,15 +30,6 @@ persistence:
   enabled: true
   storageClass: standard-rwo
   size: 20Gi
-
-resources:
-  requests:
-    cpu: 500m
-    memory: 1Gi
-
-  limits:
-    cpu: 1
-    memory: 2Gi
 
 service:
   type: ClusterIP
